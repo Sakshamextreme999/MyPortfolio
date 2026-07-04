@@ -9,19 +9,37 @@ import Dock from './components/Dock';
 import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
 import ThreeBackground from './components/ThreeBackground';
+import { useEffect, useState } from 'react';
 
 /**
  * Main App Component
  * Portfolio website for Saksham Shri Gupta
  */
 function App() {
+  const [theme, setTheme] = useState('dark');
+
+  useEffect(() => {
+    // Check saved theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+    
+    // Apply theme
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
+
   return (
-    <div className="dark font-body-md text-body-md bg-background text-on-background selection:bg-primary/30">
+    <div className={`${theme} font-body-md text-body-md bg-background text-on-background selection:bg-primary/30`}>
       {/* Scroll Progress Bar */}
       <ScrollProgress />
 
       {/* Immersive 3D Background */}
-      <ThreeBackground />
+       {/*<ThreeBackground /> */}
 
       {/* Fixed Header */}
       <Header />
@@ -45,4 +63,5 @@ function App() {
 }
 
 export default App;
+
 

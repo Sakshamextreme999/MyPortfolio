@@ -22,13 +22,13 @@ const Hero = () => {
       id="home" 
       className="min-h-screen flex flex-col justify-center items-center px-6 text-center max-w-4xl mx-auto"
     >
-      {/* Profile Image */}
-      <div className="animate-float mb-8 stagger-in">
-        <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-primary/10 p-1 bg-gradient-to-tr from-primary to-secondary shadow-2xl">
+      {/* Profile Image - Above Name */}
+      <div className="mb-8 stagger-in">
+        <div className="w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-primary/20 p-1.5 bg-gradient-to-tr from-primary to-secondary shadow-2xl hover:scale-105 transition-transform duration-300">
           <img
             alt="Saksham Shri Gupta"
             className="w-full h-full object-cover rounded-full"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuClTMde-EObOgCZY9aZDwR3B523SBVT-k7g5LKcXqxHT_tnESbD4sSKk7mXi-asz5BlSmCRdmyb2MmcD26E2uF5LEovqEGfs_JC8d4HxuBBnYxh-6Y-kVStPYloz-9GoHhp3z93Ao41QNfQ_vgnJjHk1ZW7kSz6_uqF6-GBDbvQ2DE5p5rm0-qSI8teAwLxcAI3IJswVAS6UT7Y8gFAF_nauKNgtOAzf9jhDBvt2TcVYwBMHDbRGnMwsUU2J_9XB2WCLUsEe389MVE"
+            src="/IMG_20240129_012614.jpg"
           />
         </div>
       </div>
@@ -81,7 +81,7 @@ const Hero = () => {
           <span className="material-symbols-outlined">work</span>
         </a>
         <a
-          href="mailto:your.email@example.com"
+          href="mailto:sakshamextreme999@gmail.com"
           className="w-12 h-12 rounded-full glass-card flex items-center justify-center text-primary social-link hover:text-white hover:bg-primary/20 transition-all"
         >
           <span className="material-symbols-outlined">mail</span>

@@ -70,15 +70,17 @@ const Contact = () => {
     console.log('Form submitted:', formData);
   };
 
+  
   return (
-    <section 
-      ref={sectionRef}
-      id="contact" 
-      className="py-24 px-6 max-w-container-max mx-auto scroll-reveal"
-    >
-      <div className="glass-card rounded-[2rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl">
-        {/* Contact Information */}
-        <div className="p-12 lg:p-16 flex flex-col justify-between">
+  <section
+    ref={sectionRef}
+    id="contact"
+    className="py-24 px-6 max-w-7xl mx-auto"
+  >
+    <div className="glass-card rounded-[2rem] overflow-hidden grid grid-cols-1 lg:grid-cols-2 shadow-2xl scroll-reveal">
+
+      {/* Contact Information */}
+      <div className="p-12 lg:p-16 flex flex-col justify-between">
           <div>
             <h2 className="font-headline-xl text-headline-xl mb-6 text-primary drop-shadow-lg">
               Let's connect
@@ -191,9 +193,11 @@ const Contact = () => {
             </button>
           </form>
         </div>
-      </div>
+       </div>
+    
     </section>
   );
 };
+
 
 export default Contact;

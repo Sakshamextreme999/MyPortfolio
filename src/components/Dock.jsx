@@ -45,7 +45,13 @@ const Dock = () => {
   };
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 p-2 glass-card rounded-full backdrop-blur-2xl border border-white/20 shadow-2xl">
+    <div
+  className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-center"
+  style={{ width: "fit-content" }}
+>
+
+  <div className="glass-card rounded-full backdrop-blur-2xl border border-white/20 shadow-2xl flex items-center gap-2 p-2">
+  
       {/* Home */}
       <div className="dock-item">
         <button
@@ -69,7 +75,7 @@ const Dock = () => {
             {theme === 'dark' ? 'light_mode' : 'dark_mode'}
           </span>
         </button>
-        <span className="dock-tooltip">Theme</span>
+        <span className="dock-tooltip">Toggle Theme</span>
       </div>
 
       <div className="w-px h-6 bg-white/10 mx-1"></div>
@@ -115,7 +121,9 @@ const Dock = () => {
         <span className="dock-tooltip">Contact</span>
       </div>
     </div>
+    </div>
   );
 };
+
 
 export default Dock;

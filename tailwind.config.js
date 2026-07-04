@@ -8,6 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Dark mode colors
         "on-primary-fixed-variant": "#5a00c6",
         "inverse-primary": "#732ee4",
         "tertiary-container": "#a15100",
@@ -54,7 +55,31 @@ export default {
         "on-tertiary": "#4f2500",
         "primary-fixed-dim": "#d2bbff",
         "on-tertiary-fixed": "#301400",
-        "inverse-surface": "#e8dfee"
+        "inverse-surface": "#e8dfee",
+        
+        // Light mode colors
+        light: {
+          "background": "#faf9fc",
+          "on-background": "#1c1b1f",
+          "surface": "#faf9fc",
+          "on-surface": "#1c1b1f",
+          "primary": "#6750a4",
+          "on-primary": "#ffffff",
+          "primary-container": "#e8def8",
+          "on-primary-container": "#21005e",
+          "secondary": "#006495",
+          "on-secondary": "#ffffff",
+          "secondary-container": "#c9e6ff",
+          "on-secondary-container": "#001e30",
+          "tertiary": "#7d5260",
+          "on-tertiary": "#ffffff",
+          "tertiary-container": "#ffd8e4",
+          "on-tertiary-container": "#31111d",
+          "outline": "#79747e",
+          "outline-variant": "#c4c7c5",
+          "surface-variant": "#e7e0ec",
+          "on-surface-variant": "#49454f",
+        }
       },
       borderRadius: {
         DEFAULT: "0.25rem",
