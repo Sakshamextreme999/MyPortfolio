@@ -68,7 +68,9 @@ const Header = () => {
           ))}
         </div>
 
-        <button className="btn-primary px-6 py-2 rounded-lg text-white font-medium text-label-md">
+        <button 
+        onClick={() => window.open('/Saksham_shri_gupta Resume_new_all.pdf', '_blank')}
+        className="btn-primary px-6 py-2 rounded-lg text-white font-medium text-label-md">
           Resume
         </button>
       </nav>

@@ -46,7 +46,7 @@ const Dock = () => {
 
   return (
     <div
-  className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] flex items-center justify-center"
+  className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center justify-center"
   style={{ width: "fit-content" }}
 >
 

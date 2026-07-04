@@ -5,7 +5,6 @@
 @tailwind utilities;
 
 
-
 * {
   margin: 0;
   padding: 0;
@@ -78,29 +77,80 @@ body {
 }
 
 .dock-item {
-  position: relative;
+  position: relative !important;
+  display: inline-block !important;
 }
 
 .dock-tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-10px);
-  background: rgba(0, 0, 0, 0.9);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-size: 11px;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+    position: absolute !important;
+    bottom: calc(100% + 8px) !important;
+    left: 50% !important;
+    transform: translateX(-50%) translateY(0) !important;
+    padding: 8px 14px !important;
+    border-radius: 8px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.3px !important;
+
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+
+    z-index: 99999 !important;
+
+    /* Default: Black background with white text for light mode */
+    background: rgba(30, 30, 30, 0.98) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
 }
 
-.dock-item:hover .dock-tooltip {
-  opacity: 1;
-  transform: translateX(-50%) translateY(-20px);
+/* Arrow pointer for tooltip */
+.dock-tooltip::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    border: 6px solid transparent !important;
+    border-top-color: rgba(30, 30, 30, 0.98) !important;
 }
+
+/* Dark mode - white tooltip with dark text */
+.dark .dock-tooltip {
+    background: rgba(30, 30, 30, 0.98) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35) !important;
+}
+
+.dark .dock-tooltip::after {
+    border-top-color: rgba(30, 30, 30, 0.98) !important;
+}
+
+/* Light mode - dark tooltip with white text */
+.light .dock-tooltip {
+    background: rgba(255, 255, 255, 0.98) !important;
+    color: #1a1a1a !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.light .dock-tooltip::after {
+    border-top-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Show tooltip on hover */
+.dock-item:hover .dock-tooltip {
+    opacity: 1 !important;
+    transform: translateX(-50%) translateY(-8px) !important;
+    visibility: visible !important;
+}
+
 
 .stagger-in {
   opacity: 0;

@@ -50,7 +50,9 @@ const Hero = () => {
 
       {/* CTA Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto stagger-in delay-4">
-        <button className="btn-primary px-8 py-4 rounded-xl text-white font-semibold flex items-center justify-center gap-2 shadow-xl">
+        <button 
+        onClick={() => window.open('/Saksham_shri_gupta Resume_new_all.pdf', '_blank')}
+        className="btn-primary px-8 py-4 rounded-xl text-white font-semibold flex items-center justify-center gap-2 shadow-xl">
           <span className="material-symbols-outlined">download</span>
           Download Resume
         </button>
