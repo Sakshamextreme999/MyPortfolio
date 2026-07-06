@@ -445,7 +445,7 @@ body {
 
 .light input:focus,
 .light textarea:focus {
-  border-color: #6750a4 !important;
+  border-color: #7854d9 !important;
 }
 
 /* Project cards in light mode */
@@ -496,4 +496,18 @@ body {
 .light .social-link:hover .material-symbols-outlined {
   color: #6750a4 !important;
   fill: #6750a4 !important;
+}
+
+.custom-cursor {
+  display: inline-block;
+  margin-left: 2px;
+  font-weight: 400;
+  color: currentColor; /* Matches the text color */
+  animation: blink 0.5s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }

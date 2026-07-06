@@ -2,6 +2,9 @@
  * Hero Component
  * Main hero section with profile image and call-to-action
  */
+
+import { TypeAnimation } from "react-type-animation";
+
 const Hero = () => {
   const scrollToProjects = () => {
     const element = document.getElementById('projects');
@@ -32,11 +35,23 @@ const Hero = () => {
           />
         </div>
       </div>
-
-      {/* Heading */}
-      <h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4 text-gradient stagger-in delay-1">
-        Hi, I'm Saksham Shri Gupta
-      </h1>
+{/* Heading */}
+<h1 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-4">
+  <TypeAnimation
+    className="text-primary"   // Change the color here
+    sequence={[
+      "Hi, I'm Saksham Shri Gupta",
+      2000,
+      "",
+      500,
+    ]}
+    speed={25}
+    repeat={Infinity}
+    cursor={false}
+    wrapper="span"
+  />
+  <span className="custom-cursor text-primary">|</span>
+</h1>
 
       {/* Subtitle */}
       <p className="font-headline-sm text-headline-sm text-on-surface mb-6 font-semibold stagger-in delay-2 drop-shadow-md">
