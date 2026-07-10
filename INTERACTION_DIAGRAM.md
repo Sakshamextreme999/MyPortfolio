@@ -1,0 +1,429 @@
+# 🎯 Cursor Interaction System - Visual Guide
+
+## System Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        USER INTERACTION                          │
+│                     (Mouse Movement/Scroll)                      │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    EVENT HANDLERS                                │
+│  ┌──────────────────┐      ┌──────────────────┐                │
+│  │  onMouseMove()   │      │    onScroll()    │                │
+│  │  - Screen coords │      │  - Scroll delta  │                │
+│  │  - NDC transform │      │  - Velocity calc │                │
+│  └────────┬─────────┘      └────────┬─────────┘                │
+└───────────┼────────────────────────┼──────────────────────────┘
+            │                        │
+            ▼                        ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                   3D SPACE PROJECTION                            │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  Raycaster.setFromCamera(mouseNDC, camera)             │   │
+│  │  - Converts 2D screen → 3D world coordinates           │   │
+│  │  - Projects to focal plane at 1000px from camera       │   │
+│  │  - Stored in mouse3DRef (Vector3)                      │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  DISTANCE CALCULATIONS                           │
+│                                                                   │
+│  For Each Particle (i = 0 to particleCount):                    │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │  distance = particlePos.distanceTo(mouse3DRef)         │   │
+│  │                                                           │   │
+│  │  if (distance < cursorInfluenceRadius):                 │   │
+│  │     influenceFactor = 1 - (distance / radius)           │   │
+│  │     forceMagnitude = influenceFactor² × strength        │   │
+│  │                                                           │   │
+│  │     Apply force → Update velocity → Update position     │   │
+│  └─────────────────────────────────────────────────────────┘   │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     VISUAL FEEDBACK                              │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌───────────────┐│
+│  │  Particle Size   │  │  Object Scale    │  │  Emissive     ││
+│  │  Grows ~80%      │  │  Increases ~30%  │  │  Glow +50%    ││
+│  └──────────────────┘  └──────────────────┘  └───────────────┘│
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Particle Interaction Flow
+
+```
+                           CURSOR POSITION
+                                 ●
+                                 │
+                    ┌────────────┼────────────┐
+                    │            │            │
+              ┌─────┴─────┐      │      ┌────┴─────┐
+              │ Within    │      │      │ Outside  │
+              │ 500px     │      │      │ Radius   │
+              └─────┬─────┘      │      └────┬─────┘
+                    │            │           │
+                    ▼            │           ▼
+         ┌──────────────────┐   │    ┌────────────────┐
+         │ Calculate Force  │   │    │ Return to      │
+         │ - Direction      │   │    │ Normal State   │
+         │ - Magnitude      │   │    │ - Size: 3-4px  │
+         │ - Mode (±)       │   │    │ - Normal vel   │
+         └────────┬─────────┘   │    └────────────────┘
+                  │             │
+                  ▼             │
+         ┌──────────────────┐  │
+         │ Apply to         │  │
+         │ Velocity         │  │
+         │ - vx += force.x  │  │
+         │ - vy += force.y  │  │
+         │ - vz += force.z  │  │
+         └────────┬─────────┘  │
+                  │            │
+                  ▼            │
+         ┌──────────────────┐ │
+         │ Update Position  │ │
+         │ pos += velocity  │ │
+         │ × delta × 10     │ │
+         └────────┬─────────┘ │
+                  │           │
+                  ▼           │
+         ┌──────────────────┐│
+         │ Visual Feedback  ││
+         │ - Size grows     ││
+         │ - Smooth lerp    ││
+         └──────────────────┘│
+                             │
+         ┌───────────────────▼──────────────────┐
+         │        RENDER UPDATED SCENE          │
+         │  particles.geometry.needsUpdate=true │
+         └──────────────────────────────────────┘
+```
+
+---
+
+## Force Calculation (Inverse Square Law)
+
+```
+Distance from cursor: d
+Influence radius: R (500px desktop, 300px mobile)
+
+┌─────────────────────────────────────────────────────┐
+│  Linear Factor:                                      │
+│  influenceFactor = 1 - (d / R)                      │
+│                                                      │
+│  Range: 1.0 (at cursor) → 0.0 (at radius edge)     │
+└─────────────────────────────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────┐
+│  Squared for realistic physics:                      │
+│  forceMagnitude = influenceFactor²                  │
+│                                                      │
+│  Creates natural falloff:                           │
+│  - Strong force near cursor                         │
+│  - Gentle force at distance                         │
+└─────────────────────────────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────┐
+│  Apply strength multiplier:                          │
+│  force = forceMagnitude × strength                  │
+│                                                      │
+│  Desktop: 1.0                                        │
+│  Mobile:  0.5                                        │
+└─────────────────────────────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────┐
+│  Direction (attract vs repel):                       │
+│  forceVector = direction × force × ±1               │
+│                                                      │
+│  + = Attract (particles move toward cursor)         │
+│  - = Repel (particles move away from cursor)        │
+│                                                      │
+│  Mode alternates: Math.sin(time × 0.3) > 0         │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## Interaction Zones
+
+```
+                    CURSOR (●)
+                       │
+        ┌──────────────┼──────────────┐
+        │              │              │
+        │    ╔═════════╧═════════╗   │
+        │    ║   INNER ZONE      ║   │  Distance: 0-250px
+        │    ║   Force: 100%-75% ║   │  Effect: Maximum
+        │    ║   Size: +80%      ║   │  Velocity: High
+        │    ╚═════════╤═════════╝   │
+        │              │              │
+        │    ┌─────────┼─────────┐   │
+        │    │  MIDDLE ZONE      │   │  Distance: 250-375px
+        │    │  Force: 75%-25%   │   │  Effect: Moderate
+        │    │  Size: +40%       │   │  Velocity: Medium
+        │    └─────────┼─────────┘   │
+        │              │              │
+        │    ░░░░░░░░░░┼░░░░░░░░░░   │
+        │    ░  OUTER ZONE       ░   │  Distance: 375-500px
+        │    ░  Force: 25%-0%    ░   │  Effect: Subtle
+        │    ░  Size: +10%       ░   │  Velocity: Low
+        │    ░░░░░░░░░░┼░░░░░░░░░░   │
+        │              │              │
+        └──────────────┼──────────────┘
+                       │
+        ═══════════════╧═══════════════
+              UNAFFECTED ZONE             Distance: >500px
+              No interaction              Effect: None
+        ═══════════════════════════════
+```
+
+---
+
+## Geometric Object Interaction
+
+```
+Floating Spheres & Octahedrons
+       ╱◯╲
+      ╱   ╲
+     ◆     ◆     ← Objects in scene
+      ╲   ╱
+       ╲◯╱
+
+When cursor approaches:
+
+┌─────────────────────────────────────────────────┐
+│  Distance < 800px?                               │
+│                                                  │
+│  YES ↓                            NO ↓          │
+│  ┌──────────────────┐      ┌─────────────────┐│
+│  │ Calculate        │      │ Return to       ││
+│  │ influence        │      │ idle state:     ││
+│  │                  │      │ - Normal scale  ││
+│  │ Apply effects:   │      │ - Base rotation ││
+│  │ • Pull toward    │      │ - Emissive 0.3  ││
+│  │   cursor (×2)    │      └─────────────────┘│
+│  │ • Rotate faster  │                          │
+│  │   (×influence)   │                          │
+│  │ • Scale up 30%   │                          │
+│  │ • Glow brighter  │                          │
+│  │   (emissive+50%) │                          │
+│  └──────────────────┘                          │
+└─────────────────────────────────────────────────┘
+```
+
+---
+
+## Performance Optimization Flow
+
+```
+                    ┌─────────────────┐
+                    │  Frame Start    │
+                    └────────┬────────┘
+                             │
+                    ┌────────▼────────┐
+                    │  FPS Monitor    │
+                    │  (every 1000ms) │
+                    └────────┬────────┘
+                             │
+                    ┌────────▼────────────┐
+                    │  FPS < 30?          │
+                    └──────┬─────────┬────┘
+                           │         │
+                      YES  │         │  NO
+                           ▼         ▼
+              ┌────────────────┐  ┌──────────────┐
+              │ Reduce Quality │  │ Continue     │
+              │ • Pixel ratio  │  │ Normal       │
+              │ • Bloom        │  │ Rendering    │
+              │   strength 0.8 │  └──────────────┘
+              └────────────────┘
+                      │
+                      ▼
+              ┌────────────────┐
+              │ Mobile Device? │
+              └──────┬─────┬───┘
+                     │     │
+                YES  │     │  NO
+                     ▼     ▼
+        ┌──────────────┐ ┌────────────────┐
+        │ Light Mode:  │ │ Full Effects:  │
+        │ • 2K parts   │ │ • 5K particles │
+        │ • No SSAO    │ │ • Bloom+SSAO   │
+        │ • 300px rad  │ │ • 500px radius │
+        │ • Force 0.5  │ │ • Force 1.0    │
+        └──────────────┘ └────────────────┘
+                │               │
+                └───────┬───────┘
+                        │
+                ┌───────▼────────┐
+                │  Render Frame  │
+                └────────────────┘
+```
+
+---
+
+## Parallax Depth Layers
+
+```
+                   CAMERA
+                     👁
+                     │
+        ════════════╧════════════  ← Screen (z=0)
+                     │
+        ─ ─ ─ ─ ─ ─ ─│─ ─ ─ ─ ─   Layer 0 (z=-500)
+                     │             Speed: 0.5
+                     │
+        ─ ─ ─ ─ ─ ─ ─│─ ─ ─ ─ ─   Layer 1 (z=-200)
+                     │             Speed: 0.8
+                     │
+        ─ ─ ─ ─ ─ ─ ─│─ ─ ─ ─ ─   Layer 2 (z=100)
+                     │             Speed: 1.1
+                     │
+        ─ ─ ─ ─ ─ ─ ─│─ ─ ─ ─ ─   Layer 3 (z=400)
+                     │             Speed: 1.4
+                     │
+        ─ ─ ─ ─ ─ ─ ─│─ ─ ─ ─ ─   Layer 4 (z=700)
+                     │             Speed: 1.7
+                     │
+                     ▼
+              SCROLL DIRECTION
+
+
+On scroll:
+• Closer layers move faster
+• Creates depth perception
+• Each layer has 2-3 objects
+• Objects float independently
+```
+
+---
+
+## Velocity Damping System
+
+```
+Frame N:
+  velocity = [10, 5, 2]
+  
+Apply damping (×0.98):
+  velocity = [9.8, 4.9, 1.96]
+  
+Frame N+1:
+  velocity = [9.8, 4.9, 1.96]
+  
+Apply damping (×0.98):
+  velocity = [9.6, 4.8, 1.92]
+  
+Frame N+2:
+  velocity = [9.6, 4.8, 1.92]
+  
+Result:
+  ✓ Smooth deceleration
+  ✓ No abrupt stops
+  ✓ Natural motion
+  ✓ Prevents jitter
+```
+
+---
+
+## Attraction vs Repulsion Modes
+
+```
+Time-based mode switching:
+
+attractMode = Math.sin(time × 0.3) > 0
+
+         ┌────────────────────────────────┐
+Time(s)  │  0   5   10  15  20  25  30   │
+         ├────────────────────────────────┤
+Mode     │  ⊕   ⊖   ⊕   ⊖   ⊕   ⊖   ⊕   │
+         └────────────────────────────────┘
+
+⊕ = Attract mode (particles move toward cursor)
+⊖ = Repel mode (particles move away from cursor)
+
+Cycle duration: ~10.5 seconds per mode
+Smooth transition: No abrupt changes
+```
+
+---
+
+## Size Response Curve
+
+```
+Particle Size Growth vs Distance:
+
+Size
+ ^
+ │
+4.0│                    ╱─────
+   │                ╱───
+3.5│            ╱───
+   │        ╱───
+3.0│    ╱───
+   │╱───
+2.5│
+   └───────────────────────────> Distance
+   0    100   200   300   400   500px
+
+Equation:
+targetSize = baseSize × (1 + influenceFactor × 0.8)
+
+At cursor (0px):    4.0px (normal=2.5)
+At 250px:          3.2px
+At 500px (edge):   2.5px (normal)
+Beyond 500px:      2.5px (no effect)
+```
+
+---
+
+## System Summary
+
+```
+┌──────────────────────────────────────────────────────┐
+│             CURSOR INTERACTION SYSTEM                 │
+├──────────────────────────────────────────────────────┤
+│                                                       │
+│  INPUT:  Mouse position (2D screen coordinates)      │
+│          Scroll delta                                │
+│                                                       │
+│  PROCESS:                                            │
+│  1. Convert to 3D world space (raycasting)          │
+│  2. Calculate distances to all particles/objects    │
+│  3. Apply physics (inverse square law)              │
+│  4. Update velocities with damping                  │
+│  5. Update positions                                │
+│  6. Apply visual feedback (size, glow, scale)       │
+│                                                       │
+│  OUTPUT: Smooth, responsive, realistic interaction   │
+│          60 FPS performance                          │
+│          Premium visual experience                   │
+│                                                       │
+└──────────────────────────────────────────────────────┘
+```
+
+---
+
+## Key Takeaways
+
+1. **Raycasting** projects 2D mouse → 3D space accurately
+2. **Inverse square law** creates realistic force falloff
+3. **Velocity-based physics** enables smooth, natural motion
+4. **Damping (×0.98)** prevents jitter and oscillation
+5. **Multi-layer system** creates depth perception
+6. **Adaptive performance** optimizes for device capability
+7. **Visual feedback** communicates interaction clearly
+
+---
+
+This system creates a **premium, engaging experience** while maintaining **60 FPS performance**! 🚀✨

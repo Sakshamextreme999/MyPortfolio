@@ -55,7 +55,7 @@ const Projects = () => {
       tags: ['Full Stack', 'Python Flask'],
       tagColors: ['bg-tertiary/30 border-tertiary/50', 'bg-primary/30 border-primary/50'],
       github: 'https://github.com/Sakshamextreme999/happy_scoops.git',
-      live: 'https://github.com/Sakshamextreme999/happy_scoops.git',
+      live: 'https://happy-scoops.onrender.com/',
       tech: 'Flask + MySQL',
       bgColor: 'bg-tertiary/5'
     },

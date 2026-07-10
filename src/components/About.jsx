@@ -70,7 +70,8 @@ const About = () => {
               Work Experience
             </h3>
 
-            <div className="p-8 glass-card rounded-2xl border-l-4 border-l-secondary">
+            {/* First Internship */}
+            <div className="p-8 glass-card rounded-2xl border-l-4 border-l-secondary mb-6">
               <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mb-6">
                 <div>
                   <h4 className="font-bold text-lg text-on-surface">
@@ -80,9 +81,14 @@ const About = () => {
                     Summer Intern – Full Stack Development
                   </p>
                 </div>
-                <span className="text-xs px-3 py-1 rounded-full bg-secondary/20 text-secondary border border-secondary/30 font-bold">
-                  Lucknow
-                </span>
+                <div className="flex flex-col sm:items-end gap-2">
+                  <span className="text-xs px-3 py-1 rounded-full bg-secondary/20 text-secondary border border-secondary/30 font-bold">
+                    Lucknow
+                  </span>
+                  <span className="text-xs text-outline font-medium">
+                    Sept 2025
+                  </span>
+                </div>
               </div>
 
               <ul className="space-y-4 text-on-surface text-sm leading-relaxed">
@@ -100,7 +106,59 @@ const About = () => {
                 </li>
               </ul>
             </div>
+
+            {/* Second Internship */}
+            <div className="p-8 glass-card rounded-2xl border-l-4 border-l-secondary">
+              <div className="flex flex-col sm:flex-row justify-between items-start gap-2 mb-6">
+                <div>
+                  <h4 className="font-bold text-lg text-on-surface">
+                    Shri Ramswaroop Digital Technologies Pvt. Ltd.
+                  </h4>
+                  <p className="text-secondary text-sm font-medium">
+                    MERN Stack Development Intern
+                  </p>
+                </div>
+                <div className="flex flex-col sm:items-end gap-2">
+                  <span className="text-xs px-3 py-1 rounded-full bg-secondary/20 text-secondary border border-secondary/30 font-bold">
+                    Lucknow
+                  </span>
+                  <span className="text-xs text-outline font-medium">
+                    June 2026
+                  </span>
+                </div>
+              </div>
+
+              <ul className="space-y-4 text-on-surface text-sm leading-relaxed">
+                <li className="flex gap-3">
+                  <span className="text-secondary mt-1 shrink-0">•</span>
+                  <span>Developed full-stack web applications using HTML, CSS, JavaScript, React.js, Node.js, Express.js, and MongoDB.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-secondary mt-1 shrink-0">•</span>
+                  <span>Built REST APIs and integrated frontend with backend services.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-secondary mt-1 shrink-0">•</span>
+                  <span>Used AI tools to improve development, debugging, and code optimization.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-secondary mt-1 shrink-0">•</span>
+                  <span>Collaborated using Git/GitHub and followed modern development practices.</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-secondary mt-1 shrink-0">•</span>
+                  <span>Participated in feature development, testing, and deployment while ensuring responsive and scalable applications.</span>
+                </li>
+              </ul>
+            </div>
           </div>
+
+
+          
+
+
+
+
         </div>
 
         {/* Activities & Honors Section */}

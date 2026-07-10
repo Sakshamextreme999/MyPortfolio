@@ -8,7 +8,7 @@ import Contact from './components/Contact';
 import Dock from './components/Dock';
 import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
-import ThreeBackground from './components/ThreeBackground';
+// import ThreeBackground from './components/ThreeBackground';
 import { useEffect, useState } from 'react';
 
 /**
@@ -38,8 +38,8 @@ function App() {
       {/* Scroll Progress Bar */}
       <ScrollProgress />
 
-      {/* Immersive 3D Background */}
-       {/*<ThreeBackground /> */}
+      {/* Immersive 3D Background with Cursor Interaction */}
+      {/*<ThreeBackground />}
 
       {/* Fixed Header */}
       <Header />
